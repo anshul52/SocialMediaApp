@@ -52,8 +52,8 @@ const Update = ({ setOpenUpdate, user }) => {
 
     let coverUrl;
     let profileUrl;
-    coverUrl = cover ? await upload(cover) : user.coverPic;
-    profileUrl = profile ? await upload(profile) : user.profilePic;
+    coverUrl = cover ? await upload(cover) : user?.coverPic;
+    profileUrl = profile ? await upload(profile) : user?.profilePic;
 
     mutation.mutate({ ...texts, coverPic: coverUrl, profilePic: profileUrl });
     setOpenUpdate(false);
@@ -73,7 +73,7 @@ const Update = ({ setOpenUpdate, user }) => {
                     src={
                       cover
                         ? URL.createObjectURL(cover)
-                        : "/upload/" + user.coverPic
+                        : "/upload/" + user?.coverPic
                     }
                     alt=""
                   />
