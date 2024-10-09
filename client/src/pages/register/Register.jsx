@@ -1,16 +1,18 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./register.scss";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Register = () => {
+  const navigate = useNavigate();
   const [inputs, setInputs] = useState({
     username: "",
     email: "",
     password: "",
     name: "",
   });
-  const [err, setErr] = useState(null);
+  const [err, setErr] = useState(null | {});
 
   const handleChange = (e) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -20,13 +22,29 @@ const Register = () => {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:8800/api/auth/register", inputs);
+      const res = await axios.post(
+        "http://localhost:7000/api/v1/auth/createUser",
+        inputs,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("---", res);
+      if (res.data.status === true) {
+        toast.success(res.data.message);
+        navigate("/");
+      } else if (res.data.status === false) {
+        console.log("status:::", true);
+        toast.error(res.data.message);
+      }
     } catch (err) {
       setErr(err.response.data);
+      console.error("---::", err);
+      toast.error(err.response.data.message);
     }
   };
-
-  console.log(err)
 
   return (
     <div className="register">
@@ -70,7 +88,7 @@ const Register = () => {
               name="name"
               onChange={handleChange}
             />
-            {err && err}
+            {/* {err && err} */}
             <button onClick={handleClick}>Register</button>
           </form>
         </div>

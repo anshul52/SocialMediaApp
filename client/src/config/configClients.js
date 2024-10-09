@@ -1,0 +1,5 @@
+exports.REACT_APP_BASE_URL_CLIENT = process.env.REACT_APP_BASE_URL_CLIENT;
+console.log(
+  "REACT_APP_BASE_URL_CLIENT:",
+  process.env.REACT_APP_BASE_URL_CLIENT
+);

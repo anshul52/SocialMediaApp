@@ -2,15 +2,16 @@ import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
 import "./login.scss";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [inputs, setInputs] = useState({
-    username: "",
+    email: "",
     password: "",
   });
   const [err, setErr] = useState(null);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -21,9 +22,10 @@ const Login = () => {
     e.preventDefault();
     try {
       await login(inputs);
-      navigate("/")
+      navigate("/");
     } catch (err) {
       setErr(err.response.data);
+      toast.error(err.response.data.message);
     }
   };
 
@@ -46,9 +48,9 @@ const Login = () => {
           <h1>Login</h1>
           <form>
             <input
-              type="text"
-              placeholder="Username"
-              name="username"
+              type="email"
+              placeholder="email"
+              name="email"
               onChange={handleChange}
             />
             <input
@@ -57,7 +59,6 @@ const Login = () => {
               name="password"
               onChange={handleChange}
             />
-            {err && err}
             <button onClick={handleLogin}>Login</button>
           </form>
         </div>

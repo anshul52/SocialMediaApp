@@ -1,7 +1,7 @@
 require("dotenv").config();
 exports.PORT = process.env.PORT ? parseInt(process.env.PORT) : 8080;
 exports.BASE_URL = process.env.BASE_URL || "/api/v11/";
-console.log("process.env.BASE_URL :::", process.env.BASE_URL);
+exports.JWT_SECRET = process.env.JWT_SECRET;
 
 exports.DB_HOST = process.env.PORT || "localhost";
 exports.DB_USER = process.env.DB_USER || "root";
