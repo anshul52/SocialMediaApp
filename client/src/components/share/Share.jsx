@@ -77,7 +77,7 @@ const Share = () => {
             <label htmlFor="file">
               <div className="item">
                 <img src={Image} alt="" />
-                <span>Add Image</span>
+                <span>Add Image :</span>
               </div>
             </label>
             <div className="item">
