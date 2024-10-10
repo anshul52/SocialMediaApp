@@ -81,7 +81,9 @@
           gap: 10px;
 
           span {
-            font-size: 30px;
+            font-size: 20px;
+            text-align: left;
+            text-wrap: nowrap;
             font-weight: 500;
           }
 
@@ -111,6 +113,7 @@
             cursor: pointer;
           }
         }
+       
 
         .right {
           flex: 1;

@@ -16,7 +16,7 @@ const Stories = () => {
   //TODO Add story using react-query mutations and use upload function.
 
   return (
-    <div className="stories">
+    <div className="stories bg-red-400">
       <div className="story">
         <img src={"/upload/" + currentUser.profilePic} alt="" />
         <span>{currentUser.name}</span>

@@ -27,11 +27,11 @@ function App() {
   const Layout = () => {
     return (
       <QueryClientProvider client={queryClient}>
-        <div className={`theme-${darkMode ? "dark" : "light"}`}>
+        <div className={`theme-${darkMode ? "dark" : "light"} bg-red-400`}>
           <Navbar />
-          <div style={{ display: "flex" }}>
+          <div style={{ display: "flex" }} className="bg-blue-400 ">
             <LeftBar />
-            <div style={{ flex: 6 }}>
+            <div style={{ flex: 6 }} className="bg-green-400">
               <Outlet />
             </div>
             <RightBar />

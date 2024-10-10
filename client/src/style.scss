@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 $themes: (
   light: (
     textColor: #000,
@@ -16,7 +20,6 @@ $themes: (
     border: #444,
   ),
 );
-
 @mixin themify($themes) {
   @each $theme, $map in $themes {
     .theme-#{$theme} & {

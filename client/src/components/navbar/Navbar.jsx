@@ -17,7 +17,7 @@ const Navbar = () => {
   const { currentUser } = useContext(AuthContext);
 
   return (
-    <div className="navbar">
+    <div className="navbar bg-green-400 ">
       <div className="left">
         <Link to="/" style={{ textDecoration: "none" }}>
           <span>lamasocial</span>
@@ -39,10 +39,7 @@ const Navbar = () => {
         <EmailOutlinedIcon />
         <NotificationsOutlinedIcon />
         <div className="user">
-          <img
-            src={"/upload/" + currentUser.profilePic}
-            alt=""
-          />
+          <img src={"/upload/" + currentUser.profilePic} alt="" />
           <span>{currentUser.name}</span>
         </div>
       </div>
