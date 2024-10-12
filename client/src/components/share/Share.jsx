@@ -27,12 +27,12 @@ const Share = () => {
 
   const mutation = useMutation(
     (newPost) => {
-      return makeRequest.post("/posts", newPost);
+      // return makeRequest.post("/posts", newPost);
     },
     {
       onSuccess: () => {
         // Invalidate and refetch
-        queryClient.invalidateQueries(["posts"]);
+        // queryClient.invalidateQueries(["posts"]);
       },
     }
   );

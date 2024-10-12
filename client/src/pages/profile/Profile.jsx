@@ -18,12 +18,13 @@ import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
 import Update from "../../components/update/Update";
 import { useState, useEffect } from "react";
+import UserPostList from "../../components/profile/UserPostList";
 
 const Profile = () => {
   const [openUpdate, setOpenUpdate] = useState(false);
   const { currentUser } = useContext(AuthContext);
   const token = localStorage.getItem("token");
-  const userId = parseInt(useLocation().pathname.split("/")[2]);
+  const userId = JSON.parse(localStorage.getItem("users_dets"))?.id;
   const [userData, setUserData] = useState({
     username: "",
     id: null,
@@ -101,58 +102,64 @@ const Profile = () => {
           />
         </div>
         <div className="profileContainer">
-          <div className="uInfo">
-            <div className="left">
-              <a href="http://facebook.com">
-                <FacebookTwoToneIcon fontSize="large" />
-              </a>
-              <a href="http://facebook.com">
-                <InstagramIcon fontSize="large" />
-              </a>
-              <a href="http://facebook.com">
-                <TwitterIcon fontSize="large" />
-              </a>
-              <a href="http://facebook.com">
-                <LinkedInIcon fontSize="large" />
-              </a>
-              <a href="http://facebook.com">
-                <PinterestIcon fontSize="large" />
-              </a>
-            </div>
-            <div className="center">
-              <span className=" bg-red-400">Name: {userData?.name}</span>
-              <span className="profileDets">Email: {userData?.email}</span>
-              <div className="info">
-                <div className="item">
-                  <PlaceIcon />
-                  <span>{userData?.city}</span>
+          <div className=" rounded-[5px] overflow-hidden bg-[#222222] text-[#fff]/80 ">
+            <div className="flex w-full p-3">
+              <div className=" flex flex-col w-[80%]">
+                <span className=" ">Name: {userData?.name}</span>
+                <span className="profileDets">Email: {userData?.email}</span>
+                <div className="">
+                  <div className="">
+                    <PlaceIcon />
+                    <span>{userData?.city}</span>
+                  </div>
+                  <div className="">
+                    <LanguageIcon />
+                    <span>
+                      <a href={userData?.website}>Website</a>
+                    </span>
+                  </div>
                 </div>
-                <div className="item">
-                  <LanguageIcon />
-                  <span>{userData?.website}</span>
-                </div>
+                {rIsLoading ? (
+                  "loading"
+                ) : userId === currentUser.id ? (
+                  <button onClick={() => setOpenUpdate(true)}>update</button>
+                ) : (
+                  <button onClick={handleFollow}>
+                    {relationshipData?.includes(currentUser?.id)
+                      ? "Following"
+                      : "Follow"}
+                  </button>
+                )}
               </div>
-              {rIsLoading ? (
-                "loading"
-              ) : userId === currentUser.id ? (
-                <button onClick={() => setOpenUpdate(true)}>update</button>
-              ) : (
-                <button onClick={handleFollow}>
-                  {relationshipData?.includes(currentUser?.id)
-                    ? "Following"
-                    : "Follow"}
-                </button>
-              )}
+
+              <div className="w-[20%]">
+                <EmailOutlinedIcon />
+                <MoreVertIcon />
+              </div>
             </div>
-            <div className="right">
-              <EmailOutlinedIcon />
-              <MoreVertIcon />
+            <div className="left bg-[#222222]">
+              <a href="http://facebook.com">
+                <FacebookTwoToneIcon fontSize="large" className="scale-[.5]" />
+              </a>
+              <a href="http://facebook.com">
+                <InstagramIcon fontSize="large" className="scale-[.5]" />
+              </a>
+              <a href="http://facebook.com">
+                <TwitterIcon fontSize="large" className="scale-[.5]" />
+              </a>
+              <a href="http://facebook.com">
+                <LinkedInIcon fontSize="large" className="scale-[.5]" />
+              </a>
+              <a href="http://facebook.com">
+                <PinterestIcon fontSize="large" className="scale-[.5]" />
+              </a>
             </div>
           </div>
           <Posts userId={userId} />
         </div>
       </>
       {openUpdate && <Update setOpenUpdate={setOpenUpdate} user={data} />}
+      {userId && <UserPostList userId={userId} />}
     </div>
   );
 };

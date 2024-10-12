@@ -10,6 +10,7 @@ import Navbar from "./components/navbar/Navbar";
 import LeftBar from "./components/leftBar/LeftBar";
 import RightBar from "./components/rightBar/RightBar";
 import Home from "./pages/home/Home";
+import PostUpload from "./pages/PostUpload/PostUpload";
 import Profile from "./pages/profile/Profile";
 import "./style.scss";
 import { useContext } from "react";
@@ -27,11 +28,11 @@ function App() {
   const Layout = () => {
     return (
       <QueryClientProvider client={queryClient}>
-        <div className={`theme-${darkMode ? "dark" : "light"} bg-red-400`}>
+        <div className={`theme-${darkMode ? "dark" : "light"} bg-[#333333]`}>
           <Navbar />
-          <div style={{ display: "flex" }} className="bg-blue-400 ">
+          <div style={{ display: "flex" }} className=" ">
             <LeftBar />
-            <div style={{ flex: 6 }} className="bg-green-400">
+            <div style={{ flex: 6 }} className="">
               <Outlet />
             </div>
             <RightBar />
@@ -61,6 +62,10 @@ function App() {
         {
           path: "/",
           element: <Home />,
+        },
+        {
+          path: "/PostUpload",
+          element: <PostUpload />,
         },
         {
           path: "/profile/:id",

@@ -41,12 +41,12 @@ const Post = ({ post }) => {
   );
   const deleteMutation = useMutation(
     (postId) => {
-      return makeRequest.delete("/posts/" + postId);
+      // return makeRequest.delete("/posts/" + postId);
     },
     {
       onSuccess: () => {
         // Invalidate and refetch
-        queryClient.invalidateQueries(["posts"]);
+        // queryClient.invalidateQueries(["posts"]);
       },
     }
   );
@@ -64,7 +64,7 @@ const Post = ({ post }) => {
       <div className="container">
         <div className="user">
           <div className="userInfo">
-            <img src={"/upload/"+post.profilePic} alt="" />
+            <img src={"/upload/" + post.profilePic} alt="" />
             <div className="details">
               <Link
                 to={`/profile/${post.userId}`}

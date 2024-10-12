@@ -25,6 +25,7 @@ export const AuthContextProvider = ({ children }) => {
     if (res.data.status === true) {
       setCurrentUser(res.data.token);
       toast.success(res.data.message);
+      localStorage.setItem("users_dets", JSON.stringify(res.data.user));
     } else if (res.data.status === false) {
       toast.error(res.data.message);
     }
