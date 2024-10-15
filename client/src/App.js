@@ -28,7 +28,11 @@ function App() {
   const Layout = () => {
     return (
       <QueryClientProvider client={queryClient}>
-        <div className={`theme-${darkMode ? "dark" : "light"} bg-[#333333]`}>
+        <div
+          className={`theme-${
+            darkMode ? "dark" : "light"
+          } bg-[#333333] font-poppins font-semibold `}
+        >
           <Navbar />
           <div style={{ display: "flex" }} className=" ">
             <LeftBar />
