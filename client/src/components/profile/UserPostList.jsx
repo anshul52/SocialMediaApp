@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { BiSolidLike } from "react-icons/bi";
 import { useSelector, useDispatch } from "react-redux";
+import { FaRegComment } from "react-icons/fa";
+import { BiLike } from "react-icons/bi";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { IMAGE_PATH_URL } from "../../config/configClients";
+import { PiShareFatBold } from "react-icons/pi";
 
 const UserPostList = ({ userId }) => {
   const user = useSelector((state) => state.user);
@@ -89,6 +93,15 @@ const UserPostList = ({ userId }) => {
                   className="mt-2 max-w-full rounded"
                 />
               )}
+              <div className="flex items-center gap-4 h-10">
+                <div>{true ? <BiLike /> : <BiSolidLike />}</div>
+                <div>
+                  <FaRegComment />
+                </div>
+                <div>
+                  <PiShareFatBold />
+                </div>
+              </div>
             </li>
           );
         })}

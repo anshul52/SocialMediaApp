@@ -72,7 +72,7 @@ function App() {
           element: <PostUpload />,
         },
         {
-          path: "/profile/:id",
+          path: "/profile",
           element: <Profile />,
         },
       ],
