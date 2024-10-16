@@ -28,6 +28,7 @@ const PostUpload = () => {
     );
     formData.append("post_description", postDescription);
     formData.append("image", image);
+    console.log("formData::::", formData);
 
     const token = localStorage.getItem("token");
     try {

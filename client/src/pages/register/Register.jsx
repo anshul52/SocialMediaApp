@@ -31,7 +31,7 @@ const Register = () => {
           },
         }
       );
-      console.log("---", res);
+      // console.log("---", res);
       if (res.data.status === true) {
         toast.success(res.data.message);
         navigate("/");
@@ -41,7 +41,7 @@ const Register = () => {
       }
     } catch (err) {
       setErr(err.response.data);
-      console.error("---::", err);
+      // console.error("---::", err);
       toast.error(err.response.data.message);
     }
   };

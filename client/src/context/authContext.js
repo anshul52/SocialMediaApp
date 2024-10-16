@@ -14,7 +14,6 @@ export const AuthContextProvider = ({ children }) => {
       "REACT_APP_BASE_URL_CLIENT:",
       process.env.REACT_APP_BASE_URL_CLIENT
     );
-    console.log("REACT_APP_BASE_URL_CLIENT:::", REACT_APP_BASE_URL_CLIENT);
     const res = await axios.post(
       REACT_APP_BASE_URL_CLIENT + "auth/loginUser",
       inputs

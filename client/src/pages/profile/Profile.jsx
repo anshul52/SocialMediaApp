@@ -3,9 +3,18 @@ import FacebookTwoToneIcon from "@mui/icons-material/FacebookTwoTone";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import PinterestIcon from "@mui/icons-material/Pinterest";
-import { REACT_APP_BASE_URL_CLIENT } from "../../config/configClients";
+import {
+  REACT_APP_BASE_URL_CLIENT,
+  IMAGE_PATH_URL,
+} from "../../config/configClients";
 import axios from "axios";
+import { MdEdit } from "react-icons/md";
 import TwitterIcon from "@mui/icons-material/Twitter";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setUserDetails,
+  updateProfilePic,
+} from "../../redux/Slice/userProfileDetsSlice";
 import PlaceIcon from "@mui/icons-material/Place";
 import LanguageIcon from "@mui/icons-material/Language";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
@@ -13,7 +22,6 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Posts from "../../components/posts/Posts";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
-import { useLocation } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
 import Update from "../../components/update/Update";
@@ -21,6 +29,8 @@ import { useState, useEffect } from "react";
 import UserPostList from "../../components/profile/UserPostList";
 
 const Profile = () => {
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const [openUpdate, setOpenUpdate] = useState(false);
   const { currentUser } = useContext(AuthContext);
   const token = localStorage.getItem("token");
@@ -46,8 +56,9 @@ const Profile = () => {
         },
       }
     );
-    console.log("---", response.data.data);
+    // console.log("---", response.data.data);
     setUserData(response.data.data);
+    dispatch(setUserDetails(response.data.data));
     return response.data;
   };
   const { isLoading, error, data } = useQuery(
@@ -88,6 +99,7 @@ const Profile = () => {
   useEffect(() => {
     const data = fetchUser();
     setUserData(data);
+    console.log("IMAGE_PATH_URL:::", process.env.IMAGE_PATH_BASE_URL);
   }, []);
 
   return (
@@ -96,51 +108,64 @@ const Profile = () => {
         <h1>Profile</h1>
       </div>
       <>
-        <div className="images">
+        {/* <div className="images">
           <img src={"/upload/" + data?.coverPic} alt="" className="cover" />
           <img
             src={"/upload/" + data?.profilePic}
             alt=""
             className="profilePic"
           />
-        </div>
-        <div className="profileContainer">
+        </div> */}
+        <div className="p-6">
           <div className=" rounded-[5px] overflow-hidden bg-[#222222] text-[#fff]/80 ">
-            <div className="flex w-full p-3">
-              <div className=" flex flex-col w-[80%]">
-                <span className=" ">Name: {userData?.name}</span>
-                <span className="profileDets">Email: {userData?.email}</span>
-                <div className="">
-                  <div className="">
-                    <PlaceIcon />
-                    <span>{userData?.city}</span>
-                  </div>
-                  <div className="">
-                    <LanguageIcon />
-                    <span>
-                      <a href={userData?.website}>Website</a>
-                    </span>
+            <div className="flex w-full p-5 justify-between">
+              <div className="w-[80%] flex gap-5">
+                <div className=" ">
+                  <div className="h-[100px] relative overflow-hidden w-[100px] bg-[#333333] rounded-full ">
+                    <div className="absolute flex justify-end p-2 bottom-0 w-full h-1/2 bg-gray-700/70 right-0 opacity-0 hover:opacity-100">
+                      <MdEdit className="" />
+                    </div>
+                    <img
+                      src={`http://localhost:7000/uploads/${user?.ProfilePic_path}`}
+                      alt=""
+                      className="w-full h-full object-cover object-center"
+                    />
                   </div>
                 </div>
-                {rIsLoading ? (
-                  "loading"
-                ) : userId === currentUser.id ? (
-                  <button onClick={() => setOpenUpdate(true)}>update</button>
-                ) : (
-                  <button onClick={handleFollow}>
-                    {relationshipData?.includes(currentUser?.id)
-                      ? "Following"
-                      : "Follow"}
-                  </button>
-                )}
+                <div className=" flex flex-col  ">
+                  <span className=" ">Name: {user?.name}</span>
+                  <span className="profileDets">Email: {user?.email}</span>
+                  <div className="">
+                    <div className="">
+                      <PlaceIcon />
+                      <span>{user?.city}</span>
+                    </div>
+                    <div className="">
+                      <LanguageIcon />
+                      <span>
+                        <a href={user?.website}>Website</a>
+                      </span>
+                    </div>
+                  </div>
+                  {rIsLoading ? (
+                    "loading"
+                  ) : userId === currentUser.id ? (
+                    <button onClick={() => setOpenUpdate(true)}>update</button>
+                  ) : (
+                    <button onClick={handleFollow}>
+                      {relationshipData?.includes(currentUser?.id)
+                        ? "Following"
+                        : "Follow"}
+                    </button>
+                  )}
+                </div>
               </div>
-
-              <div className="w-[20%]">
+              <div className="w-[20%] flex items-start justify-end">
                 <EmailOutlinedIcon />
                 <MoreVertIcon />
               </div>
             </div>
-            <div className="left bg-[#222222]">
+            <div className="w-full flex items-center justify-end p-3 bg-[#222222]">
               <a href="http://facebook.com">
                 <FacebookTwoToneIcon fontSize="large" className="scale-[.5]" />
               </a>
@@ -161,14 +186,7 @@ const Profile = () => {
           <Posts userId={userId} />
         </div>
       </>
-      <hr className=" border-t-[2px] border-t-[#050708]/30" />
 
-      <button
-        type="button"
-        class="text-white bg-[#050708]/30 hover:bg-[#24292F]/90 mr-10 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 me-2 my-2"
-      >
-        <a href="/PostUpload">Upload Post</a>
-      </button>
       <hr className=" border-t-[2px] border-t-[#050708]/30" />
       {openUpdate && <Update setOpenUpdate={setOpenUpdate} user={data} />}
       {userId && <UserPostList userId={userId} />}

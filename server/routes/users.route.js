@@ -6,13 +6,21 @@ const {
   getUser,
   uploadPost,
   userPostList,
+  uplaodProfileImage,
 } = require("../controllers/user.controller");
 
 router.get("/getuser", checkAuth, getUser);
 
 router.post("/postUpload", checkAuth, upload.single("image"), uploadPost);
 
-// user all post
+router.post(
+  "/profileImgUpload",
+  checkAuth,
+  upload.single("image"),
+  uplaodProfileImage
+);
+
+// user all post list
 router.get("/posts", checkAuth, userPostList);
 
 module.exports = router;
