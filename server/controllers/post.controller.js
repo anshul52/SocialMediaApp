@@ -1,9 +1,12 @@
 // controllers/postController.js
-const postService = require("../services/postService");
+const { getRandomPosts } = require("../services/postService");
 
 const fetchRandomPosts = async (req, res) => {
   try {
-    const posts = await postService.getRandomPosts(10); // Fetch 10 random posts
+    console.log("------------------------------>>");
+
+    const posts = await getRandomPosts(10);
+
     if (posts.length > 0) {
       res.status(200).json(posts);
     } else {
