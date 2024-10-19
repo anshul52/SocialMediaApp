@@ -3,23 +3,16 @@ import FacebookTwoToneIcon from "@mui/icons-material/FacebookTwoTone";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import PinterestIcon from "@mui/icons-material/Pinterest";
-import {
-  REACT_APP_BASE_URL_CLIENT,
-  IMAGE_PATH_URL,
-} from "../../config/configClients";
+import { REACT_APP_BASE_URL_CLIENT } from "../../config/configClients";
 import axios from "axios";
 import { MdEdit } from "react-icons/md";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  setUserDetails,
-  updateProfilePic,
-} from "../../redux/Slice/userProfileDetsSlice";
+import { setUserDetails } from "../../redux/Slice/userProfileDetsSlice";
 import PlaceIcon from "@mui/icons-material/Place";
 import LanguageIcon from "@mui/icons-material/Language";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import Posts from "../../components/posts/Posts";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import { useContext } from "react";
@@ -33,18 +26,8 @@ const Profile = () => {
   const dispatch = useDispatch();
   const [openUpdate, setOpenUpdate] = useState(false);
   const { currentUser } = useContext(AuthContext);
-  const token = localStorage.getItem("token");
   const userId = JSON.parse(localStorage.getItem("users_dets"))?.id;
-  const [userData, setUserData] = useState({
-    username: "",
-    id: null,
-    email: "",
-    name: "",
-    coverPic: null,
-    profilePic: null,
-    city: null,
-    website: null,
-  });
+
   const fetchUser = async () => {
     const token = localStorage.getItem("token");
     const response = await axios.get(
@@ -56,16 +39,12 @@ const Profile = () => {
         },
       }
     );
-    // console.log("---", response.data.data);
-    setUserData(response.data.data);
     dispatch(setUserDetails(response.data.data));
     return response.data;
   };
-  const { isLoading, error, data } = useQuery(
+  const { data } = useQuery(
     ["user"],
-    // makeRequest.get("/users/find/" + userId).then((res) => {
-    //   return res.data;
-    // })
+
     () => fetchUser()
   );
 
@@ -87,7 +66,6 @@ const Profile = () => {
     },
     {
       onSuccess: () => {
-        // Invalidate and refetch
         queryClient.invalidateQueries(["relationship"]);
       },
     }
@@ -97,9 +75,7 @@ const Profile = () => {
     mutation.mutate(relationshipData.includes(currentUser?.id));
   };
   useEffect(() => {
-    const data = fetchUser();
-    setUserData(data);
-    console.log("IMAGE_PATH_URL:::", process.env.IMAGE_PATH_BASE_URL);
+    fetchUser();
   }, []);
 
   return (
@@ -183,7 +159,7 @@ const Profile = () => {
               </a>
             </div>
           </div>
-          <Posts userId={userId} />
+          {/* <Posts userId={userId} /> */}
         </div>
       </>
 

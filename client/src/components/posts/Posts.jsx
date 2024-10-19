@@ -12,10 +12,10 @@ import React, { useEffect, useState } from "react";
 const Posts = ({ userId }) => {
   const user = useSelector((state) => state.user);
   const [posts, setPosts] = useState([]);
+  const [openDropdownId, setOpenDropdownId] = useState(null);
 
   useEffect(() => {
     getRandomPosts();
-    console.log("user::::", user);
   }, []);
 
   const getRandomPosts = async () => {
@@ -52,7 +52,9 @@ const Posts = ({ userId }) => {
       }
     }
   };
-
+  const toggleDropdown = (postId) => {
+    setOpenDropdownId((prevId) => (prevId === postId ? null : postId));
+  };
   return (
     <div className="posts text-white">
       {posts.length > 0 ? (
@@ -81,8 +83,43 @@ const Posts = ({ userId }) => {
                       </h3>
                     </div>
                   </div>
-                  <div>
-                    <BsThreeDotsVertical />
+                  <div className="relative ">
+                    <BsThreeDotsVertical
+                      onClick={() => toggleDropdown(post.id)}
+                    />
+                    {openDropdownId === post.id && (
+                      <div
+                        id="dropdown"
+                        class="z-10  absolute bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-[#0a0a0a]"
+                      >
+                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+                          <li>
+                            <a
+                              href="#"
+                              class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                            >
+                              Edit
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              href="#"
+                              class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                            >
+                              Delete
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              href="#"
+                              class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                            >
+                              Share
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    )}
                   </div>
                 </div>
 

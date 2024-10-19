@@ -11,16 +11,16 @@ import { Link } from "react-router-dom";
 import { setUserDetails } from "../../redux/Slice/userProfileDetsSlice";
 import { useContext } from "react";
 import { DarkModeContext } from "../../context/darkModeContext";
-import { AuthContext } from "../../context/authContext";
 import { useEffect } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { REACT_APP_BASE_URL_CLIENT } from "../../config/configClients";
 
 const Navbar = () => {
+  const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const { toggle, darkMode } = useContext(DarkModeContext);
-  const { currentUser } = useContext(AuthContext);
   const fetchUser = async () => {
     const token = localStorage.getItem("token");
     const response = await axios.get(
@@ -57,12 +57,19 @@ const Navbar = () => {
         </div>
       </div>
       <div className="right">
-        <PersonOutlinedIcon />
+        <a href="/Profile">
+          <PersonOutlinedIcon />
+        </a>
         <EmailOutlinedIcon />
         <NotificationsOutlinedIcon />
-        <div className="user">
-          <img src={"/upload/" + currentUser.profilePic} alt="" />
-          <span>{currentUser.name}</span>
+        <div className="">
+          <div className="h-[40px] w-[40px] relative overflow-hidden bg-red-400 rounded-full">
+            <img
+              src={`http://localhost:7000/uploads/${user?.ProfilePic_path}`}
+              alt=""
+              className="w-full h-full object-cover object-center"
+            />
+          </div>
         </div>
       </div>
     </div>
