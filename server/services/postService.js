@@ -24,7 +24,6 @@ const getRandomPosts = async (limit = 10) => {
       [maxId, limit]
     );
 
-    console.log("Posts fetched:", posts);
     return posts;
   } catch (error) {
     console.error("Full error object:", error);
