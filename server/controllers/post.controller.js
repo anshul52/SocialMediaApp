@@ -3,8 +3,6 @@ const { getRandomPosts } = require("../services/postService");
 
 const fetchRandomPosts = async (req, res) => {
   try {
-    console.log("------------------------------>>");
-
     const posts = await getRandomPosts(10);
 
     if (posts.length > 0) {

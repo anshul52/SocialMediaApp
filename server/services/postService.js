@@ -14,7 +14,6 @@ const getRandomPosts = (limit = 10) => {
       const maxId = maxIdResult[0]?.maxId;
       console.log("maxId::::", maxId);
 
-      // If maxId is null or undefined, there are no posts in the table
       if (!maxId) {
         console.log("No posts found, returning an empty array.");
         return resolve({ message: "No posts available" });
