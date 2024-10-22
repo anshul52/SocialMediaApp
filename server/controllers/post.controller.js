@@ -1,20 +1,23 @@
 // controllers/postController.js
-const { getRandomPosts } = require("../services/postService");
+const { fetchPostsFeed } = require("../services/postService");
+const { AppError } = require("../utils/errorHandler");
 
-const fetchRandomPosts = async (req, res) => {
+const UserFeedPosts = async (req, res, next) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = 7;
   try {
-    const posts = await getRandomPosts(10);
-
-    if (posts.length > 0) {
-      res.status(200).json(posts);
-    } else {
-      res.status(404).json({ message: "No posts available" });
+    const userId = req.body.userId;
+    if (!userId) {
+      throw new AppError("User ID is required", 400);
     }
+
+    const posts = await fetchPostsFeed(userId, page, limit);
+    res.status(200).json(posts);
   } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
   }
 };
 
 module.exports = {
-  fetchRandomPosts,
+  UserFeedPosts,
 };

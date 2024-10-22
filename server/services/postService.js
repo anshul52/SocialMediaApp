@@ -1,52 +1,90 @@
+// const db = require("../config/db");
+
+// exports.fetchPostsFeed = (userId) => {
+//   return new Promise((resolve, reject) => {
+//     const query = `
+//       SELECT
+//           p.id AS postId,
+//           p.post_description,
+//           p.img_path,
+//           p.img_upload_time,
+//           IFNULL(l.likeCount, 0) AS total_likes,
+//           IFNULL(c.commentCount, 0) AS total_comments,
+//           CASE
+//               WHEN ul.userId IS NOT NULL THEN TRUE
+//               ELSE FALSE
+//           END AS userLiked,
+//           u.id AS userId,       -- User ID of the post creator
+//           u.name AS userName,   -- Name of the post creator
+//           u.ProfilePic_path     -- Profile picture path of the post creator
+//       FROM posts p
+//       LEFT JOIN (
+//           SELECT postId, COUNT(*) AS likeCount
+//           FROM likes
+//           GROUP BY postId
+//       ) l ON p.id = l.postId
+//       LEFT JOIN (
+//           SELECT post_id, COUNT(*) AS commentCount
+//           FROM comments
+//           GROUP BY post_id
+//       ) c ON p.id = c.post_id
+//       LEFT JOIN likes ul ON p.id = ul.postId AND ul.userId = ?
+//       LEFT JOIN users u ON p.user_id = u.id   -- Join to get user info
+//       ORDER BY p.img_upload_time DESC         -- Order by latest post
+//     `;
+
+//     db.query(query, [userId], (err, result) => {
+//       if (err) {
+//         return reject(err);
+//       }
+//       resolve(result);
+//     });
+//   });
+// };
+
 const db = require("../config/db");
 
-const getRandomPosts = (limit = 10) => {
+exports.fetchPostsFeed = (userId, page, limit) => {
   return new Promise((resolve, reject) => {
-    console.log("Attempting to fetch maxId from posts");
+    const offset = (page - 1) * limit; // Calculate offset based on page number
+    const query = `
+      SELECT 
+          p.id AS postId,
+          p.post_description,
+          p.img_path,
+          p.img_upload_time,
+          IFNULL(l.likeCount, 0) AS total_likes,
+          IFNULL(c.commentCount, 0) AS total_comments,
+          CASE 
+              WHEN ul.userId IS NOT NULL THEN TRUE
+              ELSE FALSE
+          END AS userLiked,
+          u.id AS userId,
+          u.name AS userName,
+          u.ProfilePic_path
+      FROM posts p
+      LEFT JOIN (
+          SELECT postId, COUNT(*) AS likeCount
+          FROM likes
+          GROUP BY postId
+      ) l ON p.id = l.postId
+      LEFT JOIN (
+          SELECT post_id, COUNT(*) AS commentCount
+          FROM comments
+          GROUP BY post_id
+      ) c ON p.id = c.post_id
+      LEFT JOIN likes ul ON p.id = ul.postId AND ul.userId = ?
+      LEFT JOIN users u ON p.user_id = u.id
+      ORDER BY p.img_upload_time DESC
+      LIMIT ?                               -- Fetch 7 posts at a time
+      OFFSET ?;                             -- Skip previously fetched posts
+    `;
 
-    // Fetching maxId from posts table
-    db.query("SELECT MAX(id) AS maxId FROM posts", (err, maxIdResult) => {
+    db.query(query, [userId, limit, offset], (err, result) => {
       if (err) {
-        console.error("Error fetching maxId:", err.stack);
-        return reject({ error: "Internal server error", details: err.message });
+        return reject(err);
       }
-
-      const maxId = maxIdResult[0]?.maxId;
-      console.log("maxId::::", maxId);
-
-      if (!maxId) {
-        console.log("No posts found, returning an empty array.");
-        return resolve({ message: "No posts available" });
-      }
-
-      console.log(
-        `Fetching random posts where id >= FLOOR(1 + RAND() * ${maxId}) with limit ${limit}`
-      );
-
-      // Querying random posts based on the calculated random id
-      db.query(
-        `SELECT * FROM posts WHERE id >= FLOOR(1 + RAND() * ?) LIMIT ?;`,
-        [maxId, limit],
-        (error, posts) => {
-          if (error) {
-            console.error("Error fetching random posts:", error.stack);
-            return reject({
-              error: "Internal server error",
-              details: error.message,
-            });
-          }
-
-          if (posts.length === 0) {
-            return resolve({ message: "No posts available" });
-          }
-
-          return resolve(posts);
-        }
-      );
+      resolve(result);
     });
   });
-};
-
-module.exports = {
-  getRandomPosts,
 };
