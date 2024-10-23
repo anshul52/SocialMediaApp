@@ -5,8 +5,7 @@ import "./home.scss";
 
 const Home = () => {
   return (
-    // <div className="home bg-[#333333]">
-    <div className="home bg-green-400">
+    <div className="px-[20px] h-[100vh] overflow-y-scroll dark-scrollbar pt-[20px]">
       <Stories />
       <Share />
       <Posts />

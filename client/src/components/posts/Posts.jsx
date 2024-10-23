@@ -1,7 +1,6 @@
 import { FaRegComment } from "react-icons/fa";
-import { BiLike } from "react-icons/bi";
+import { BiLike, BiSolidLike } from "react-icons/bi";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { BiSolidLike } from "react-icons/bi";
 import { PiShareFatBold } from "react-icons/pi";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -70,7 +69,7 @@ const Posts = ({ userId }) => {
   };
 
   return (
-    <div className="posts text-white">
+    <div className="posts text-white h-[50vh] overflow-y-scroll dark-scrollbar">
       {memoizedPosts.length > 0 ? (
         <ul className="space-y-4">
           {memoizedPosts?.map((post) => {
@@ -162,18 +161,28 @@ const Posts = ({ userId }) => {
           })}
         </ul>
       ) : (
-        <>
-          {loading && <p>Loading...</p>}
+        <>{!hasMore && <p>No more posts to show.</p>}</>
+      )}
+      {loading && <p>Loading...</p>}
 
-          {!loading && hasMore && (
-            <button onClick={loadMorePosts}>Load More</button>
-          )}
-
-          {!hasMore && <p>No more posts to show.</p>}
-        </>
+      {!loading && hasMore && (
+        <button onClick={loadMorePosts}>Load More</button>
       )}
     </div>
   );
 };
 
 export default Posts;
+
+// {posts.map((post) => (
+//   <li key={post.postId}>
+//     <div>
+//       <h3>{post.userName}</h3> {/* User's name */}
+//       <img src={post.ProfilePic_path} alt="Profile" width="50" height="50" />
+//       <p>{post.post_description}</p>
+//       <img src={post.img_path} alt="Post" width="200" height="200" />
+//       <p>{post.total_likes} likes | {post.total_comments} comments</p>
+//       <p>User Liked: {post.userLiked ? 'Yes' : 'No'}</p>
+//     </div>
+//   </li>
+// ))}
